@@ -45,7 +45,12 @@ export default function Contact() {
         {socials.map((social, i) => {
           const Icon = social.icon;
           const colors = carnivalColors[i % carnivalColors.length];
+          /* not github*/
+          if (social.name === 'GitHub') {
+            return null;
+          }
           return (
+
             <a
               key={social.name}
               href={social.link}
@@ -82,6 +87,7 @@ export default function Contact() {
       </div>
 
       {/* ── Divider ── */}
+      {/*
       <div className="flex items-center gap-4 mb-16 max-w-2xl mx-auto">
         <div className="flex-1 h-px bg-border" />
         <span className="text-muted-foreground text-xs tracking-widest uppercase px-2">or drop a message</span>
@@ -89,6 +95,8 @@ export default function Contact() {
       </div>
 
       {/* ── Contact form ── */}
+      {/*
+      
       <form onSubmit={handleSubmit} className="max-w-2xl mx-auto w-full space-y-4">
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
@@ -143,6 +151,7 @@ export default function Contact() {
           {sent ? '✓ Message sent!' : 'Send Message →'}
         </button>
       </form>
+        */}
 
     </SectionLayout>
   );
