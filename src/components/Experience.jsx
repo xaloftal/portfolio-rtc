@@ -8,13 +8,18 @@ export default function Experience() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [maxScroll, setMaxScroll] = useState(0);
   const [needsScroll, setNeedsScroll] = useState(true);
+  const [isDesktop, setIsDesktop] = useState(() => window.innerWidth >= 768);
 
   useEffect(() => {
+    const updateViewportMode = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+
     const updateMaxScroll = () => {
       if (containerRef.current) {
         const scrollW = containerRef.current.scrollWidth;
         const windowW = window.innerWidth;
-        if (scrollW <= windowW) {
+        if (!isDesktop || scrollW <= windowW) {
           setNeedsScroll(false);
           setMaxScroll(0);
         } else {
@@ -25,14 +30,19 @@ export default function Experience() {
       }
     };
 
+    updateViewportMode();
     setTimeout(updateMaxScroll, 100);
+    window.addEventListener('resize', updateViewportMode);
     window.addEventListener('resize', updateMaxScroll);
-    return () => window.removeEventListener('resize', updateMaxScroll);
-  }, []);
+    return () => {
+      window.removeEventListener('resize', updateViewportMode);
+      window.removeEventListener('resize', updateMaxScroll);
+    };
+  }, [isDesktop]);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!targetRef.current || !needsScroll) return;
+      if (!targetRef.current || !needsScroll || !isDesktop) return;
 
       const { top, height } = targetRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
@@ -50,24 +60,26 @@ export default function Experience() {
     }
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [needsScroll]);
+  }, [needsScroll, isDesktop]);
+
+  const shouldAutoScroll = needsScroll && isDesktop;
 
   return (
-    <section id="experience" ref={targetRef} className={`relative w-full ${needsScroll ? 'h-[300vh]' : 'h-auto'}`}>
-      <div className={`${needsScroll ? 'sticky top-0 h-screen overflow-hidden' : 'py-24'} w-full flex flex-col justify-center bg-background`}>
+    <section id="experience" ref={targetRef} className={`relative w-full ${shouldAutoScroll ? 'h-[300vh]' : 'h-auto'}`}>
+      <div className={`${shouldAutoScroll ? 'sticky top-0 h-screen overflow-hidden' : 'py-24'} w-full flex flex-col justify-center bg-background`}>
         <div className="max-w-6xl mx-auto px-8 w-full">
           <h2 className="text-3xl md:text-5xl font-bold mb-12 text-transparent bg-clip-text bg-gradient-to-r from-foreground to-foreground/50">
             Experience
           </h2>
         </div>
 
-        <div className="w-full">
+        <div className={`w-full ${shouldAutoScroll ? 'overflow-hidden' : 'overflow-x-auto md:overflow-hidden'}`}>
           <div
             ref={containerRef}
-            className="relative flex w-max gap-6 md:gap-8 px-8 md:pl-[calc((100vw-72rem)/2)] md:pr-8 will-change-transform ease-out"
-            style={{
-              transform: needsScroll ? `translateX(-${scrollProgress * maxScroll}px)` : 'none'
-            }}
+            className={`relative flex w-max gap-6 md:gap-8 px-8 md:pl-[calc((100vw-72rem)/2)] md:pr-8 ${shouldAutoScroll ? 'will-change-transform ease-out' : 'pb-6 md:pb-0'}`}
+            style={shouldAutoScroll ? {
+              transform: `translateX(-${scrollProgress * maxScroll}px)`
+            } : undefined}
           >
             {/* Timeline Line (Background Track) */}
             <div className="absolute top-[38px] left-0 right-0 h-0.5 bg-muted" />

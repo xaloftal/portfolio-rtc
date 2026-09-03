@@ -1,39 +1,73 @@
+import { useEffect, useRef, useState } from 'react';
 import SectionLayout from './SectionLayout';
 import { ArrowRight, Download } from 'lucide-react';
 import { TypeAnimation } from 'react-type-animation';
 
 export default function About() {
+  const animationRef = useRef(null);
+  const [isAnimationVisible, setIsAnimationVisible] = useState(false);
+
+  useEffect(() => {
+    const target = animationRef.current;
+
+    if (!target) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsAnimationVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.35,
+      }
+    );
+
+    observer.observe(target);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <SectionLayout id="about" className="bg-gradient-to-br from-background via-background to-primary/5">
-      <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-12">
+    <SectionLayout id="about" className="bg-gradient-to-br from-background via-background to-primary/5 ">
+      <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-12 ">
         <div className="flex-1 space-y-6 text-center md:text-left">
           <h1 className="text-5xl md:text-7xl font-bold tracking-tighter">
-            Hi, I'm <span className="text-primary">Diana</span>.<br />
-            <TypeAnimation
-              sequence={[
-                'I enjoy solving complex problems.',
-                2000,
-                'I build backend systems.',
-                2000,
-                'I design complex databases.',
-                2000,
-                'I am a Medical Informatics Engineer.',
-                2000,
-              ]}
-              wrapper="span"
-              speed={50}
-              repeat={Infinity}
-              className="text-foreground/90 block min-h-[1.2em]"
-            />
+            Hi, I'm <span className="text-primary">Diana</span>.
           </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl leading-relaxed mx-auto md:mx-0">
-            Medical Informatics Engineer and Master's student, with a preference for back-end and database development, alongside hands-on experience in full-stack development and academic research.
-          </p>
+          <div ref={animationRef} className="min-h-[9rem] md:min-h-[8rem] pt-2 text-5xl md:text-7xl font-bold tracking-tighter leading-tight">
+            {isAnimationVisible ? (
+              <TypeAnimation
+                key="about-animation"
+                sequence={[
+                  'I enjoy solving complex problems.',
+                  2000,
+                  'I build backend systems.',
+                  2000,
+                  'I design complex databases.',
+                  2000,
+                  'I am a Medical Informatics Engineer.',
+                  2000,
+                ]}
+                wrapper="span"
+                speed={50}
+                repeat={Infinity}
+                className="block text-foreground/90"
+              />
+            ) : (
+              <span className="block text-foreground/90">&nbsp;</span>
+            )}
+          </div>
+          <div className="space-y-2">
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl leading-relaxed mx-auto md:mx-0">
+              Medical Informatics Engineer and Master's student, with a preference for back-end and database development, alongside hands-on experience in full-stack development and academic research.
+            </p>
 
-          <div className="pt-8 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <a href="#projects" className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full font-medium hover:bg-primary/90 transition-colors">
-              View Work <ArrowRight size={20} />
-            </a>
+            <div className="pt-8 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+              <a href="#projects" className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full font-medium hover:bg-primary/90 transition-colors">
+                View Work <ArrowRight size={20} />
+              </a>
+            </div>
           </div>
         </div>
 
