@@ -2,6 +2,22 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
+## Tests
+
+This project uses Vitest and React Testing Library for basic smoke tests.
+
+```bash
+npm test
+```
+
+For watch mode while developing:
+
+```bash
+npm run test:watch
+```
+
+The current tests check that the main sections render, the in-page navigation points at existing section IDs, and the project/social links stay valid.
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
