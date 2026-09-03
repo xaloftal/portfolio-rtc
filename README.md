@@ -1,32 +1,63 @@
-# React + Vite
+# Portfolio RTC
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Personal portfolio website for Diana Dinis, built as a single-page React application. The site presents an about section, work experience, featured projects, education, skills, and contact/social links in a clean scroll-based layout.
+
+## Tech Stack
+
+- React 19
+- Vite
+- Tailwind CSS
+- Lucide React and React Icons
+- react-type-animation
+- Vitest
+- React Testing Library
+- Netlify
+
+## Project Structure
+
+- `src/App.jsx` composes the main page sections.
+- `src/components/` contains the section components and shared layout wrapper.
+- `src/data.js` stores the portfolio content and navigation metadata.
+- `src/index.css` defines the base styles and custom scrollbars.
+- `netlify.toml` configures the production build, SPA routing, and security headers.
+
+## Available Scripts
+
+- `npm run dev` starts the Vite development server.
+- `npm run build` creates the production build in `dist`.
+- `npm run preview` serves the production build locally.
+- `npm run lint` runs Oxlint.
+- `npm test` runs the Vitest smoke tests once.
+- `npm run test:watch` runs the tests in watch mode.
 
 ## Tests
 
-This project uses Vitest and React Testing Library for basic smoke tests.
+The test suite covers basic smoke checks:
 
-```bash
-npm test
-```
+- the main sections render
+- in-page navigation links point to existing section IDs
+- project links stay valid
+- footer and contact social links stay valid
 
-For watch mode while developing:
+These tests are intentionally lightweight so they can catch broken anchors, missing sections, and link regressions without relying on a browser automation stack.
 
-```bash
-npm run test:watch
-```
+## Deployment
 
-The current tests check that the main sections render, the in-page navigation points at existing section IDs, and the project/social links stay valid.
+The app is configured for Netlify.
 
-Currently, two official plugins are available:
+- Build command: `npm run build`
+- Publish directory: `dist`
+- SPA fallback: all routes rewrite to `index.html`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Security headers are defined in `netlify.toml`, including:
 
-## React Compiler
+- Content Security Policy
+- `X-Content-Type-Options`
+- `Referrer-Policy`
+- `Permissions-Policy`
+- anti-framing protection via CSP `frame-ancestors`
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the Oxlint configuration
+## Notes
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+The portfolio content is data-driven through `src/data.js`, so updating experience, projects, education, or socials usually only requires changing that file.
